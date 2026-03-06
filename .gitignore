@@ -1,0 +1,98 @@
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Claude Code local settings (not shared)
+.claude/settings.local.json
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# OS
+Thumbs.db
+.DS_Store
+nul
+
+# Serena AI tool (local config)
+.serena/
+
+# Logs
+*.log
+logs/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# ============================================================================
+# Absolute AGI Project-Specific
+# ============================================================================
+
+# Data & Databases
+data/
+*.db
+*.sqlite
+
+# Runtime Artifacts
+.token_ledger.json
+.test_*.json
+.test_*.csv
+
+# Compiled Cognitive Artifacts
+# active = template baseline (tracked)
+# runtime/previous/hall_of_fame = runtime/history (ignored)
+config/compiled/previous/*.json
+config/compiled/runtime/
+config/compiled/hall_of_fame/
+
+# Logs (already covered above but being explicit)
+logs/*.log
+
+# Local archives and scratch areas
+archive/
+tmp/
+
+# Optional Claude collaboration skills (local only)
+.claude/skills/
+.claude/
+.zcf/
+CLAUDE.md
+')
+
+# Local notes and experimental scripts
+docs/comments_*.txt
+scripts/start_e2e.py
+
+# Agent-installed local tools (runtime-installed, not source-of-truth)
+src/body/channels/agent_installed/
+
+# Root-level ad-hoc learning/runtime notes
+/experiment_log.txt
+/exploration_log.txt
+/learning_*.txt
+/reflection_*.txt
+/self_reflection_*.txt
+/work_log.txt
+/project_notes.txt
+/milestone_reflection.md
+/narrative_generation_reflection.md
+/SUMMARY-H001.md
