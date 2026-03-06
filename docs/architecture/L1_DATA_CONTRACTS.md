@@ -193,6 +193,64 @@ The following invariants must always hold.
 
 ---
 
+## Minimal Shared Envelope
+
+All cross-process contracts should inherit a minimal shared envelope.
+
+Required fields:
+
+| Field | Meaning |
+|---|---|
+| `schema` | Contract family and type identifier |
+| `version` | Schema version for compatibility gating |
+| `id` | Unique identifier for this payload |
+| `timestamp` | Emission timestamp in UTC |
+| `origin` | Producing subsystem or channel |
+| `correlation_id` | Groups related work across steps |
+| `causation_id` | Points to the immediate triggering contract |
+| `agent_id` | Agent instance identifier |
+| `safety` | Structured policy metadata |
+
+Recommended optional fields:
+
+- `trace_id` for distributed tracing
+- `priority` for queue arbitration
+- `ttl` for expiring transient payloads
+- `labels` for observability and routing
+
+### Identifier Semantics
+
+- `id` must be globally unique within a deployment
+- `correlation_id` must remain stable across a commitment lifecycle
+- `causation_id` must point to the direct parent event, intent, or action
+
+### Time Semantics
+
+- `timestamp` is the authoritative event time
+- delayed delivery must not rewrite historical timestamps
+- snapshots may add `observed_at` and `updated_at` fields when needed
+
+### Idempotency and Replay
+
+- event consumers must treat `id` as the deduplication key
+- replayed events must preserve original `id`, `timestamp`, and `origin`
+- derived snapshots may be recomputed, but historical events may not be mutated
+
+### Failure Classification
+
+Planning and execution contracts should classify failures into bounded categories:
+
+- `transient`
+- `dependency`
+- `policy`
+- `validation`
+- `resource`
+- `unknown`
+
+This gives retry, defer, and escalation logic a stable machine-readable interface.
+
+---
+
 ## State Modeling Principles
 
 State contracts follow several principles:

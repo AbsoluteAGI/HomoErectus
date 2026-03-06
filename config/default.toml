@@ -1,0 +1,12 @@
+agent_id = "public-skeleton"
+mode = "bootstrap_restricted"
+
+[runtime]
+event_bus = "in_memory"
+snapshot_store = "in_memory"
+memory_mode = "ephemeral"
+policy_mode = "default_safe"
+
+[channels]
+text_input = true
+text_output = true

@@ -49,6 +49,7 @@ This stage initializes:
 - identity and personality parameters
 - base policy constraints
 - core data contracts and schemas
+- minimal in-memory working state required for safe startup
 
 ---
 
@@ -63,8 +64,9 @@ This typically includes:
 - attention scheduling
 - commitment evaluation
 - planning and execution subsystems
+- ephemeral working and checkpoint stores if durable memory is not yet online
 
-At the end of this stage the system can process stimuli.
+At the end of this stage the system can process stimuli in a **restricted bootstrap mode**.
 
 ---
 
@@ -80,6 +82,9 @@ Examples include:
 - environment interfaces
 
 This stage ensures the agent can interact with the outside world.
+
+Durable memory services become authoritative at this stage.  
+If durable memory is unavailable, the system must remain in restricted mode rather than silently entering full operation.
 
 ---
 
@@ -118,6 +123,21 @@ Key principles include:
 
 These mechanisms ensure that every new instance begins operation
 within defined safety boundaries.
+
+## Memory Readiness Rule
+
+The startup sequence must distinguish between:
+
+- **ephemeral bootstrap memory** required to start safely
+- **durable memory substrate** required for full continuity guarantees
+
+This avoids a contradiction between startup responsiveness and the architectural requirement that cognition is memory-grounded.
+
+Allowed startup states:
+
+- `BOOTSTRAP_RESTRICTED`: core cognition running with ephemeral memory only
+- `AWAKE`: durable memory, policy, and checkpoint services available
+- `DEGRADED_RESTRICTED`: runtime alive, but one or more production-readiness checks failed
 
 ---
 

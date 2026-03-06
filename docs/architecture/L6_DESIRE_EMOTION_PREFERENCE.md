@@ -150,6 +150,29 @@ Fatigue naturally creates **behavioral budget constraints**.
 
 ---
 
+# Stability and Boundedness
+
+Motivational signals must remain numerically stable under long-running operation.
+
+Implementation guidance:
+
+- desire, confidence, and fatigue values should be clamped to bounded ranges
+- emotional modulation should decay over time unless reinforced by new evidence
+- preference updates should use bounded learning rates rather than unbounded accumulation
+- attention scoring should apply hysteresis or switching penalties to avoid oscillation
+
+When multiple signals conflict, the runtime should apply a deterministic aggregation order:
+
+1. hard policy constraints
+2. survival and safety relevant meta-state constraints
+3. commitment and obligation pressure
+4. expected desire satisfaction and learned preference
+5. tie-breakers such as recency or switching cost
+
+The exact formula may evolve, but the ordering and boundedness rules should remain explicit.
+
+---
+
 # Utility-Guided Decision Influence
 
 Motivational signals are aggregated into expected utility estimates

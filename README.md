@@ -4,6 +4,11 @@
 
 This system provides the foundation for building **Artificial Minds** that perceive, plan, act, and learn over time.
 
+This public repository currently serves two roles:
+
+- a **public whitepaper** for the layered cognitive architecture
+- an **early runtime skeleton** aligned with the active private implementation
+
 ---
 
 ## Architecture Overview
@@ -11,6 +16,7 @@ This system provides the foundation for building **Artificial Minds** that perce
 HomoErectus is organized as a layered **Agent Cognitive OS**:
 
 ```text
+L8  Initialization / Birth
 L7  Sleep / Cognitive Compiler
 L6  Motivation System
 L5  Body & Perception
@@ -79,37 +85,44 @@ Key principles:
 
 ### Prerequisites
 
-- Python ≥ 3.10
-- Redis / PostgreSQL (optional for persistence)
-- Node.js (for dashboard UI)
+- Python >= 3.11
+- Optional persistence and UI dependencies live in the active private runtime
+- This public repository keeps only a minimal runnable skeleton
 
 ### Repository Structure
 
 ```text
 HomoErectus/
 ├── README.md
+├── CONTRIBUTING.md
 ├── docs/
 │   └── architecture/
+├── config/
 ├── src/
 ├── tests/
 ├── docker/
 └── dashboard-ui/
 ```
 
-### Running the Agent (Example)
+The public repo intentionally exposes only the minimal shape of the runtime:
+
+- `docs/architecture/` contains the public architecture layers
+- `src/` contains a lightweight bootstrap entrypoint and package skeleton
+- `config/` contains minimal example runtime configuration
+- `tests/` contains smoke-level checks for the public skeleton
+- `docker/` and `dashboard-ui/` are placeholders for the broader runtime surface
+
+### Running the Public Skeleton
 
 ```bash
-# install dependencies
-pip install -r requirements.txt
+# start the public bootstrap
+python src/run_agent.py --config config/default.toml
 
-# start agent runtime
-python src/run_agent.py --config configs/genesis.yaml
-
-# view logs and telemetry
-tail -f logs/agent.log
+# run the public smoke tests
+python -m pytest
 ```
 
-> Note: The runtime is evolving; this release primarily provides **architecture reference and early implementation**. Some features may be experimental.
+> Note: The production runtime is still under active development in a private repository. This public repository exposes the architecture, naming, and a minimal executable skeleton so contributors can follow the intended system shape without relying on unpublished code.
 
 ---
 
