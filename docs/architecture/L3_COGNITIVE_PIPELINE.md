@@ -72,6 +72,21 @@ P4 (Attention) → P5 (Commitment Engine) → Planner → Executor → Body Chan
 
 Each **commitment** is executed via a **recursive Plan-Execute-Observe-Replan (PEOR) loop**, integrating learning and memory at every step.
 
+## Public Execution Contract
+
+Even in a minimal public runtime, each commitment should expose these execution surfaces:
+
+| Surface | Purpose |
+|---|---|
+| `intent_id` | The normalized candidate selected by P4 |
+| `commitment_id` | The durable execution handle created by P5 |
+| `plan_id` | The current executable plan or plan revision |
+| `step_id` | The currently dispatched plan step |
+| `checkpoint_id` | The latest resume-safe checkpoint |
+| `outcome` | Structured success, divergence, defer, or failure result |
+
+This contract makes PEOR observable without depending on any specific planner implementation.
+
 ### Step-by-Step Procedure
 
 1. **Domain Evaluation**
@@ -80,7 +95,7 @@ Each **commitment** is executed via a **recursive Plan-Execute-Observe-Replan (P
 
 2. **Plan Generation**
    - If a template exists → use as plan blueprint.
-   - Else → query LLM for a confident plan.
+   - Else → query an available reasoning component for a confident plan.
    - If no confident plan → trigger learning or consulting subroutine.
    - Fallback → generate a best-effort exploratory plan.
 
@@ -118,8 +133,15 @@ Each **commitment** is executed via a **recursive Plan-Execute-Observe-Replan (P
 ### Notes
 
 - Recursive PEOR enables nested subtasks to repeat the loop.
-- Learning updates can modify L3/L4 or trigger LLM plan augmentation.
+- Learning updates can modify L3/L4 or trigger plan augmentation.
 - Confidence-based planning: lower-confidence steps invoke additional learning or exploratory execution.
+
+### Resume and Divergence Rules
+
+- a plan revision must produce a new `plan_id` while preserving the same `commitment_id`
+- local replans should preserve parent intent context whenever possible
+- divergence should be recorded even when the final outcome is successful
+- repeated orphan feedback must be classified and surfaced rather than silently dropped
 
 ---
 
@@ -127,6 +149,15 @@ Each **commitment** is executed via a **recursive Plan-Execute-Observe-Replan (P
 
 All candidate behaviors entering attention arbitration are normalized into a unified **intent format**.  
 This allows attention and commitment to process heterogeneous candidates consistently.
+
+At minimum, an intent should expose:
+
+- source path: external, internal, or recycled
+- actor or channel origin
+- semantic goal or requested operation
+- urgency and expected utility estimates
+- policy and capability hints
+- references to any triggering event, obligation, or social entity
 
 ---
 
@@ -172,6 +203,10 @@ Executor:
 - tracks checkpoints
 - coordinates feedback and resume behavior
 
+Implementation note:
+
+The runtime may split planning and execution across multiple modules, but the architectural boundary should remain visible in logs, events, and tests.
+
 ---
 
 ## Feedback and Resume
@@ -187,6 +222,17 @@ This ensures:
 - Safe replan loops
 - Continuous learning
 - Traceable decision paths
+
+### Feedback Hygiene
+
+To keep the loop stable, the runtime should explicitly classify:
+
+- expected feedback matched to an active step
+- late feedback matched to a closed step
+- orphan feedback with no active correlation
+- self-perception updates caused by body or capability changes
+
+These distinctions are especially important for long-running and partially concurrent execution.
 
 ---
 
@@ -206,4 +252,3 @@ This ensures:
 - Attention, commitment, and execution states remain coherent
 - Feedback triggers safe targeted replan or resume
 - Complex tasks converge without unbounded recursion
-

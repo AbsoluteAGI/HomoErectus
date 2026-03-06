@@ -34,6 +34,24 @@ The runtime is composed of the following processes:
 
 These processes together form the **runtime cognitive pipeline**.
 
+## Public Implementation Alignment
+
+The active runtime may split or rename some components while preserving the same architectural roles.
+
+Public-safe examples of aligned runtime modules include:
+
+| Architectural role | Example implementation surface |
+|---|---|
+| P1 Perception Fusion | `p1_perception` |
+| P2 Internal State Engine | `p2_state_engine` |
+| P3 External Stimulus Processing | `p3_thalamus`, `p3_subconscious` |
+| P3.5 Ideation and Recycling | `p3_5_ideation`, `p4_ideation` |
+| P4 Attention Scheduler | `p4_attention` |
+| P5 Commitment Engine | `p5_consciousness` |
+| Background compilation | `cc_compiler`, scheduler-managed sleep services |
+
+This mapping is intentional: the architecture should remain stable even if the runtime decomposes one logical process into multiple implementation modules.
+
 ---
 
 # Dual Cognitive Paths
@@ -179,6 +197,13 @@ Examples include:
 
 Events form the **authoritative history of the runtime**.
 
+Minimum public-safe bus requirements:
+
+- append-only event publishing
+- per-event origin and correlation identifiers
+- replay support for observability and incident analysis
+- queue isolation between latency-sensitive and background workloads
+
 ---
 
 ### Snapshot Bus
@@ -192,6 +217,12 @@ Examples include:
 - active commitments
 - fatigue and desire levels
 
+Minimum public-safe snapshot requirements:
+
+- last-writer-wins semantics per snapshot family
+- explicit freshness metadata
+- read-optimized access for attention, planning, and monitoring
+
 ---
 
 ### Memory Substrate
@@ -200,12 +231,43 @@ Memory provides long-term and short-term context.
 
 All cognitive processes read from and write to memory layers.
 
+At minimum, the runtime should distinguish:
+
+- bootstrap working state needed for safe startup
+- operational working memory for foreground cognition
+- durable narrative and knowledge stores for continuity
+
 ---
 
 ### Security Policy Layer
 
 All execution requests pass through a security policy layer
 that enforces runtime safety constraints.
+
+At minimum, the policy layer should classify each requested action as:
+
+- allowed
+- allowed with restriction
+- deferred pending approval
+- denied
+
+This makes P5 and Executor behavior auditable rather than implicit.
+
+---
+
+# Minimal Runtime State Model
+
+To keep L2 implementable across runtimes, the following state surfaces should exist even in a minimal deployment:
+
+| Surface | Purpose |
+|---|---|
+| foreground focus | Current P4-selected item |
+| active commitments | Work currently owned by P5/Planner/Executor |
+| deferred obligations | Resume-safe pending work |
+| process health | Liveness and degraded-mode signaling |
+| queue depth | Backpressure and observability |
+
+These state surfaces do not prescribe storage technology, only the minimum runtime observability required by the architecture.
 
 ---
 
