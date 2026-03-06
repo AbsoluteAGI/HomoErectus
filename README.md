@@ -145,7 +145,7 @@ Please review the `CONTRIBUTING.md` for guidelines.
 
 ## License
 
-This project is released under the **MIT License**.
+This project is released under the **Apache License**.
 
 ---
 
