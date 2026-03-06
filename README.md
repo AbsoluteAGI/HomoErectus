@@ -9,6 +9,13 @@ This public repository currently serves two roles:
 - a **public whitepaper** for the layered cognitive architecture
 - an **early runtime skeleton** aligned with the active private implementation
 
+## Current Status
+
+The full runtime is in the final debugging and stabilization phase.
+
+The complete public code release is **coming soon**.  
+Until then, this repository exposes the architecture documents and a minimal public skeleton that reflects the intended system shape.
+
 ---
 
 ## Architecture Overview
@@ -83,6 +90,9 @@ Key principles:
 
 ## Getting Started
 
+If you are looking for the full production runtime: it is not fully published here yet.  
+This repository currently provides the public architecture and a minimal bootstrap skeleton while the main codebase is in final debugging.
+
 ### Prerequisites
 
 - Python >= 3.11
@@ -122,7 +132,7 @@ python src/run_agent.py --config config/default.toml
 python -m pytest
 ```
 
-> Note: The production runtime is still under active development in a private repository. This public repository exposes the architecture, naming, and a minimal executable skeleton so contributors can follow the intended system shape without relying on unpublished code.
+> Note: The production runtime is still in final debugging in a private repository. A fuller public code release is coming soon. For now, this repository exposes the architecture, naming, and a minimal executable skeleton so contributors can follow the intended system shape without relying on unpublished code.
 
 ---
 
